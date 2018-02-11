@@ -28,8 +28,9 @@ public class Main {
         System.out.println("D Removed: " + hashTable.remove("D"));
         System.out.println("F Removed: " + hashTable.remove("F"));
         System.out.println("Found the value for G: " +hashTable.get("G"));
-//        hashTable.traverse();
         System.out.println(hashTable.getCapacity());
+        hashTable.traverse();
+
         System.out.println("G Removed: " + hashTable.remove("G"));
 
         System.out.println("H Removed: " + hashTable.remove("H"));
@@ -41,20 +42,9 @@ public class Main {
         System.out.println("L Removed: " + hashTable.remove("L"));
         System.out.println("K Removed: " + hashTable.remove("K"));
         System.out.println("Y Removed: " + hashTable.remove("Y"));
-        System.out.println("Value of K: " + hashTable.get(null));
-        hashTable.put("A", 1);
-        hashTable.put("B", 23);
-        hashTable.put("C", 21);
-        hashTable.put("D", 21);
-        hashTable.put("E", 23);
-        hashTable.put("F", 23);
-        hashTable.put("G", 21);
-        hashTable.put("H", 21);
-        hashTable.put("I", 21);
-        hashTable.put("J", 21);
-        hashTable.put("K", 21);
-
         hashTable.traverse();
+
+
 
         System.out.println(hashTable.getSize());
     }

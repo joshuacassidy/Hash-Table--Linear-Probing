@@ -13,29 +13,29 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
     }
 
     public int find(Key key) {
-        int i = hash(key);
-        while (hashTable[i] != null && hashTable[i].getKey() != key) {
-            i = (i+1) % capacity;
+        if (key == null) {
+            throw new KeyIsNullException("Key is null");
+        } else {
+            int index = hash(key);
+            while (hashTable[index] != null && hashTable[index].getKey() != key) {
+                index = (index + 1) % capacity;
+            }
+            return index;
         }
-        return i;
     }
 
     public Value get(Key key){
-        int i = find(key);
-        if (hashTable[i] != null) {
-            return hashTable[i].getValue();
-        } else {
-            return null;
-        }
+        int index = find(key);
+        return hashTable[index] != null ? hashTable[index].getValue() : null;
     }
 
     public void put(Key key, Value value) {
-        int i = find(key);
-        if (hashTable[i] != null) {
-            hashTable[i].setValue(value);
+        int index = find(key);
+        if (hashTable[index] != null) {
+            hashTable[index].setValue(value);
             return;
         }
-        hashTable[i] = new HashItem(key, value);
+        hashTable[index] = new HashItem<>(key, value);
 
         size++;
 
@@ -45,7 +45,6 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
     }
 
     public Value remove(Key key) {
-        if(key==null) return null;
         int index = find(key);
 
         if (hashTable[index] == null || hashTable[index].getKey() == null) {
@@ -55,7 +54,15 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
         Value temp = hashTable[index].getValue();
         hashTable[index].setKey(null);
         hashTable[index].setValue(null);
+        readjustTable(index);
+        size--;
+        if (size <= capacity /3) {
+            resize(capacity/2);
+        }
+        return temp;
+    }
 
+    public void readjustTable(int index) {
         while (hashTable[index].getKey() != null) {
             Key tempKey = hashTable[index].getKey();
             Value tempVal = hashTable[index].getValue();
@@ -65,32 +72,19 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
             put(tempKey, tempVal);
             index = (index+1) % capacity;
         }
-        size--;
-        if (size <= capacity /3) {
-            resize(capacity/2);
-        }
-        return temp;
     }
 
-    public void resize(int newCapacity) {
-        HashItem[] temp = new HashItem[newCapacity];
 
-        for (int i = 0,j=0; i < capacity; i++) {
-            if(hashTable[i]  null && hashTable[i].getKey() != null) {
-                temp[j] = hashTable[i];
-                j++;
-            }
-        }
+    public void resize(int newCapacity) {
+        HashItem[] temp = hashTable;
         hashTable = new HashItem[newCapacity];
         capacity= newCapacity;
-        for (int i = 0; i < newCapacity; i++) {
+        for (int i = 0; i < temp.length; i++) {
             if(temp[i] != null && temp[i].getKey() != null) {
                 put((Key) temp[i].getKey(), (Value) temp[i].getValue());
                 size--;
             }
         }
-
-
     }
 
 
@@ -103,8 +97,6 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
     }
 
     public void traverse() {
-        System.out.println("printing");
-
         for (int i = 0; i < capacity; i = i+1 % capacity) {
             System.out.print(hashTable[i] == null ? "" : hashTable[i].getKey() + " " + hashTable[i].getValue() + "\n");
         }
