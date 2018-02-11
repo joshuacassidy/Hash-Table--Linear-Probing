@@ -44,42 +44,54 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
         }
     }
 
-
-    public void resize(int newCapacity) {
-        HashTable<Key, Value> table = new HashTable<>(newCapacity);
-
-        for(int i =0; i <capacity; i++) {
-            if (hashTable[i] != null) {
-                table.put(hashTable[i].getKey(), hashTable[i].getValue());
-            }
-        }
-
-        hashTable = table.getHashTable();
-        capacity = table.getCapacity();
-
-    }
-
     public Value remove(Key key) {
-        int i = hash(key);
-        if(hashTable[i] == null) {
+        if(key==null) return null;
+        int index = find(key);
+
+        if (hashTable[index] == null || hashTable[index].getKey() == null) {
             return null;
         }
-        System.out.println(hashTable[0]);
-        while (hashTable[i].getKey() == null || !hashTable[i].getKey().equals(key)) {
-            i = (i+1) % capacity;
 
+        Value temp = hashTable[index].getValue();
+        hashTable[index].setKey(null);
+        hashTable[index].setValue(null);
 
+        while (hashTable[index].getKey() != null) {
+            Key tempKey = hashTable[index].getKey();
+            Value tempVal = hashTable[index].getValue();
+            hashTable[index].setKey(null);
+            hashTable[index].setValue(null);
+            size--;
+            put(tempKey, tempVal);
+            index = (index+1) % capacity;
         }
-        Value temp = hashTable[i].getValue();
-        hashTable[i].setKey(null);
-        hashTable[i].setValue(null);
-
-
         size--;
-
+        if (size <= capacity /3) {
+            resize(capacity/2);
+        }
         return temp;
     }
 
+    public void resize(int newCapacity) {
+        HashItem[] temp = new HashItem[newCapacity];
+
+        for (int i = 0,j=0; i < capacity; i++) {
+            if(hashTable[i]  null && hashTable[i].getKey() != null) {
+                temp[j] = hashTable[i];
+                j++;
+            }
+        }
+        hashTable = new HashItem[newCapacity];
+        capacity= newCapacity;
+        for (int i = 0; i < newCapacity; i++) {
+            if(temp[i] != null && temp[i].getKey() != null) {
+                put((Key) temp[i].getKey(), (Value) temp[i].getValue());
+                size--;
+            }
+        }
+
+
+    }
 
 
     public HashItem[] getHashTable() {
@@ -96,6 +108,10 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
         for (int i = 0; i < capacity; i = i+1 % capacity) {
             System.out.print(hashTable[i] == null ? "" : hashTable[i].getKey() + " " + hashTable[i].getValue() + "\n");
         }
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public int hash(Key key) {
