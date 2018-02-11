@@ -29,7 +29,6 @@ public class Main {
         System.out.println("F Removed: " + hashTable.remove("F"));
         System.out.println("Found the value for G: " +hashTable.get("G"));
         System.out.println(hashTable.getCapacity());
-        hashTable.traverse();
 
         System.out.println("G Removed: " + hashTable.remove("G"));
 
@@ -41,11 +40,10 @@ public class Main {
         hashTable.remove("Josh");
         System.out.println("L Removed: " + hashTable.remove("L"));
         System.out.println("K Removed: " + hashTable.remove("K"));
-        hashTable.traverse();
 
 
 
-        System.out.println(hashTable.getSize());
+        System.out.println(hashTable);
     }
 
 }

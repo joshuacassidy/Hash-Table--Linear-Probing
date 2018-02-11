@@ -100,10 +100,15 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
         return capacity;
     }
 
-    public void traverse() {
+    @Override
+    public String toString() {
+        String str = "[";
         for (int i = 0; i < capacity; i = i+1 % capacity) {
-            System.out.print(hashTable[i] == null ? "" : hashTable[i].getKey() + " " + hashTable[i].getValue() + "\n");
+            str+=hashTable[i] == null? "(null: null)" : "("+ hashTable[i].getKey() + ": " + hashTable[i].getValue() + ")";
+            str+=i!=capacity-1 ? ", " : "";
         }
+        str+="]";
+        return str;
     }
 
     public int getSize() {
