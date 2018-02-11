@@ -26,7 +26,11 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
 
     public Value get(Key key){
         int index = find(key);
-        return hashTable[index] != null ? hashTable[index].getValue() : null;
+        if (hashTable[index] != null) {
+            return hashTable[index].getValue();
+        } else {
+            throw new ItemCouldNotBeFoundException("Item could not be found.");
+        }
     }
 
     public void put(Key key, Value value) {
@@ -48,7 +52,7 @@ public class HashTable<Key, Value> implements IHashTable<Key, Value> {
         int index = find(key);
 
         if (hashTable[index] == null || hashTable[index].getKey() == null) {
-            return null;
+            throw new ItemCouldNotBeFoundException("Item could not be found.");
         }
 
         Value temp = hashTable[index].getValue();

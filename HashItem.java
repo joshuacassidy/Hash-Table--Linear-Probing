@@ -1,6 +1,3 @@
-/**
- * Created by Josh on 28/01/2018.
- */
 public class HashItem<Key, Value> {
     public Key key;
     public Value value;

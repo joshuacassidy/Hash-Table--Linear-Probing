@@ -41,7 +41,6 @@ public class Main {
         hashTable.remove("Josh");
         System.out.println("L Removed: " + hashTable.remove("L"));
         System.out.println("K Removed: " + hashTable.remove("K"));
-        System.out.println("Y Removed: " + hashTable.remove("Y"));
         hashTable.traverse();
 
 
